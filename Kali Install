@@ -1,24 +1,24 @@
-sgdisk --zap-all /dev/$DRIVE
-sgdisk --new=1:0:+4096M /dev/$DRIVE
-sgdisk --new=2:0:+2M /dev/$DRIVE
-sgdisk --new=3:0:+128M /dev/$DRIVE
-sgdisk --new=4:0:+8192M /dev/$DRIVE
-sgdisk --new=5:0:0 /dev/$DRIVE
-sgdisk --typecode=1:8301 --typecode=2:ef02 --typecode=3:ef00 --typecode=4:8200 --typecode=5:8300 /dev/$DRIVE
-sgdisk --change-name=1:/boot --change-name=2:GRUB --change-name=3:EFI-SP --change-name=4:swap --change-name=5:rootfs /dev/$DRIVE
-sgdisk --hybrid 1:2:3 /dev/$DRIVE
-sgdisk --print /dev/$DRIVE
+sgdisk --zap-all /dev/sda
+sgdisk --new=1:0:+4096M /dev/sda
+sgdisk --new=2:0:+2M /dev/sda
+sgdisk --new=3:0:+128M /dev/sda
+sgdisk --new=4:0:+8192M /dev/sda
+sgdisk --new=5:0:0 /dev/sda
+sgdisk --typecode=1:8301 --typecode=2:ef02 --typecode=3:ef00 --typecode=4:8200 --typecode=5:8300 /dev/sda
+sgdisk --change-name=1:/boot --change-name=2:GRUB --change-name=3:EFI-SP --change-name=4:swap --change-name=5:rootfs /dev/sda
+sgdisk --hybrid 1:2:3 /dev/sda
+sgdisk --print /dev/sda
 sleep 10
-sudo cryptsetup luksFormat --type=luks1 /dev/$DRIVE1
-sudo cryptsetup luksFormat /dev/$DRIVE4
-sudo cryptsetup luksFormat /dev/$DRIVE5
+sudo cryptsetup luksFormat --type=luks1 /dev/sda1
+sudo cryptsetup luksFormat /dev/sda4
+sudo cryptsetup luksFormat /dev/sda5
 sleep 10
-sudo cryptsetup open /dev/$DRIVE1 LUKS_BOOT
-sudo cryptsetup open /dev/$DRIVE4 LUKS_SWAP
-sudo cryptsetup open /dev/$DRIVE5 LUKS_ROOT
+sudo cryptsetup open /dev/sda1 LUKS_BOOT
+sudo cryptsetup open /dev/sda4 LUKS_SWAP
+sudo cryptsetup open /dev/sda5 LUKS_ROOT
 sleep 10
 sudo mkfs.ext4 -L boot /dev/mapper/LUKS_BOOT
-sudo mkfs.vfat -F 16 -n EFI-SP /dev/$DRIVE3
+sudo mkfs.vfat -F 16 -n EFI-SP /dev/sda3
 sudo mkswap -L swap /dev/mapper/LUKS_SWAP
 sudo mkfs.btrfs -L root /dev/mapper/LUKS_ROOT
 sleep 10
